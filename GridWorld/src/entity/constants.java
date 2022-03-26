@@ -50,5 +50,5 @@ public class constants {
 
     // Constant k (i.e. number of times simplified Bellman update is executed
     // to produce the next utility estimate)
-    public static final int K = 30;
+    public static final int K = 50;
 }

@@ -60,33 +60,20 @@ public class DisplayControl {
     // Display the policy, i.e. the action to be taken at each state
     public static String displayPolicy(final Utility_Action[][] utilArr) {
         StringBuilder sb = frameTitle("Plot of Optimal Policy");
-        sb.append("|");
-        sb.append("--------|".repeat(constants.NUM_COLS));
-        sb.append("\n");
         for (int row = 0; row < constants.NUM_ROWS; row++) {
 
-            sb.append("|");
-            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS));
             sb.append("\n");
 
-            sb.append("|");
             for (int col = 0; col < constants.NUM_COLS; col++) {
                 String util = utilArr[col][row].getActionStr();
                 int n = (9 - util.length())/2;
                 String str = String.format("%1$"+n+"s", "");
                 String str1 = String.format("%1$"+(n-1)+"s", "");
-                sb.append(str + util + str1 + "|");
+                sb.append(str + util + str1 );
             }
 
-            sb.append("\n|");
-            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS));
-            sb.append("\n");
-
-            sb.append("|");
-            sb.append("--------|".repeat(constants.NUM_COLS));
-            sb.append("\n");
         }
-
+        sb.append("\n");
         System.out.println(sb.toString());
         return sb.toString();
     }
@@ -103,6 +90,7 @@ public class DisplayControl {
                 }
             }
         }
+        sb.append("\n");
         System.out.println(sb.toString());
         return sb.toString();
     }
@@ -112,8 +100,6 @@ public class DisplayControl {
 
         StringBuilder sb = frameTitle("Utilities of All States (Map)");
 
-        sb.append("|");
-        sb.append("--------|".repeat(constants.NUM_COLS));
         sb.append("\n");
 
         String pattern = "00.000";
@@ -121,23 +107,20 @@ public class DisplayControl {
 
         for (int row = 0; row < constants.NUM_ROWS; row++) {
 
-            sb.append("|");
-            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS));
+
             sb.append("\n");
 
-            sb.append("|");
+
             for (int col = 0; col < constants.NUM_COLS; col++) {
 
-                sb.append(String.format(" %s |",
+                sb.append(String.format(" %s ",
                         decimalFormat.format(utilArr[col][row].getUtil()).substring(0, 6)));
+                sb.append("  ");
             }
 
-            sb.append("\n|");
-            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS));
-            sb.append("\n");
 
-            sb.append("|");
-            sb.append("--------|".repeat(constants.NUM_COLS));
+
+
             sb.append("\n");
         }
 
@@ -176,11 +159,8 @@ public class DisplayControl {
         StringBuilder sb = new StringBuilder();
         int padding = 4;
         sb.append("\n");
-        sb.append("*".repeat(Math.max(0, str.length() + padding)));
+        sb.append("-- " + str + " --");
         sb.append("\n");
-        sb.append("* " + str + " *");
-        sb.append("\n");
-        sb.append("*".repeat(Math.max(0, str.length() + padding)));
         sb.append("\n");
         sb.append("\n");
         return sb;
