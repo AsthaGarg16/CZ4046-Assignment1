@@ -35,9 +35,14 @@ public class ValueIteration {
     public static void runValueIteration(final Cell[][] grid) {
 
         Utility_Action[][] currUtilArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
-        Utility_Action[][] newUtilArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
 
-        newUtilArr = initializeUtilities();
+        Utility_Action[][] newUtilArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
+        for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
+                newUtilArr[col][row] = new Utility_Action();
+            }
+        }
+
 
         utilityList = new ArrayList<>();
 
@@ -78,18 +83,6 @@ public class ValueIteration {
         } while ((delta) >= constants.CONVERGENCE_THRESHOLD);
     }
 
-    private static Utility_Action[][] initializeUtilities()
-    {
-
-        Utility_Action[][] newArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
-        for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
-            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
-                newArr[col][row] = new Utility_Action();
-            }
-        }
-        return newArr;
-
-    }
 
     private static String displayResults() {
         // Final item in the list is the optimal policy derived by value iteration
