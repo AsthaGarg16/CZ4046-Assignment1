@@ -11,14 +11,14 @@ import entity.constants;
 
 public class FileIOHandler
 {
-    public static void writeToFile(List<Utility_Action[][]> lstUtilitys, String fileName) {
+    public static void writeToFile(List<Utility_Action[][]> lstUtilitys, String fileName, int scale) {
 
         StringBuilder sb = new StringBuilder();
         String pattern = "00.000";
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
-        for (int col = 0; col < constants.NUM_COLS; col++) {
-            for (int row = 0; row < constants.NUM_ROWS; row++) {
+        for (int col = 0; col < constants.NUM_COLS*scale; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*scale; row++) {
 
                 Iterator<Utility_Action[][]> iter = lstUtilitys.iterator();
                 while(iter.hasNext()) {

@@ -29,7 +29,7 @@ public class PolicyIteration {
 
         config_and_results = displayResults();
 
-        FileIOHandler.writeToFile(utilityList, "policy_iteration_utilities");
+        FileIOHandler.writeToFile(utilityList, "policy_iteration_utilities", 1);
         FileIOHandler.writeToTxt(config_and_results, isValueIteration, SCALE);
     }
 

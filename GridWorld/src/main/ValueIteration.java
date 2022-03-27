@@ -29,7 +29,7 @@ public class ValueIteration {
 
         String configInfo = displayResults();
         FileIOHandler.writeToTxt(configInfo, isValueIteration, SCALE);
-        FileIOHandler.writeToFile(utilityList, "value_iteration_utilities");
+        FileIOHandler.writeToFile(utilityList, "value_iteration_utilities", 1);
     }
 
     public static void runValueIteration(final Cell[][] grid) {

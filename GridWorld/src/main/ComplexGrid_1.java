@@ -24,7 +24,7 @@ public class ComplexGrid_1 {
 
         String configInfo = displayValueResults();
         FileIOHandler.writeToTxt(configInfo, true, SCALE);
-        FileIOHandler.writeToFile(utilityList, "value_iteration_utilities_scale_"+SCALE);
+        FileIOHandler.writeToFile(utilityList, "value_iteration_utilities_scale_"+SCALE, SCALE);
 
         initializeVals();
 
@@ -36,7 +36,7 @@ public class ComplexGrid_1 {
 
         config_and_results = displayPolicyResults();
 
-        FileIOHandler.writeToFile(utilityList, "policy_iteration_utilities_scale_"+SCALE);
+        FileIOHandler.writeToFile(utilityList, "policy_iteration_utilities_scale_"+SCALE, SCALE);
         FileIOHandler.writeToTxt(config_and_results, false, SCALE);
 
 
