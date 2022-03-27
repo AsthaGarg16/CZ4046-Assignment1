@@ -49,6 +49,7 @@ public class PolicyIteration {
             }
         }
 
+
         utilityList = new ArrayList<>();
 
         boolean unchanged;

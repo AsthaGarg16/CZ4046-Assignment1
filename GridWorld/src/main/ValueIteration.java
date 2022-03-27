@@ -97,9 +97,9 @@ public class ValueIteration {
 
     private static String displayResults() {
         // Final item in the list is the optimal policy derived by value iteration
-        int lastIteration = utilityList.size() - 1;
+
         final Utility_Action[][] optimalPolicy =
-                utilityList.get(lastIteration);
+                utilityList.get(utilityList.size() - 1);
 
         StringBuilder sb = new StringBuilder();
 

@@ -58,7 +58,9 @@ public class UtilityControl {
 
         int k = 0;
         do {
-            UtilityControl.updateUtilities(newUtilArr, currUtilArr);
+            for (int i = 0; i < newUtilArr.length; i++) {
+                System.arraycopy(newUtilArr[i], 0, currUtilArr[i], 0, newUtilArr[i].length);
+            }
 
             // For each state
             for (int row = 0; row < constants.NUM_ROWS*scale; row++) {

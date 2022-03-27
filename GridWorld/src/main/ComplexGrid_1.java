@@ -115,9 +115,9 @@ public class ComplexGrid_1 {
 
     private static String displayValueResults() {
         // Final item in the list is the optimal policy derived by value iteration
-        int lastIteration = utilityList.size() - 1;
+
         final Utility_Action[][] optimalPolicy =
-                utilityList.get(lastIteration);
+                utilityList.get(utilityList.size() - 1);
 
         StringBuilder sb = new StringBuilder();
 
@@ -214,9 +214,9 @@ public class ComplexGrid_1 {
 
     private static String displayPolicyResults() {
         // Final item in the list is the optimal policy derived by policy iteration
-        int latestUtilities = utilityList.size() - 1;
+
         final Utility_Action[][] optimalPolicy =
-                utilityList.get(latestUtilities);
+                utilityList.get(utilityList.size() - 1);
         StringBuilder s = new StringBuilder();
 
         // Displays the Grid Environment
