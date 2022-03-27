@@ -18,6 +18,7 @@ public class ValueIteration {
     private static Cell[][] grid;
     private static int iterations = 0;
     private static boolean isValueIteration = true;
+    private static int SCALE = 1;
 
     public static void main(String[] args) {
 
@@ -27,13 +28,13 @@ public class ValueIteration {
         runValueIteration(grid);
 
         String configInfo = displayResults();
-        FileIOHandler.writeToTxt(configInfo, isValueIteration);
+        FileIOHandler.writeToTxt(configInfo, isValueIteration, SCALE);
         FileIOHandler.writeToFile(utilityList, "value_iteration_utilities");
     }
 
     public static void runValueIteration(final Cell[][] grid) {
 
-        Utility_Action[][] currUtilArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
+        Utility_Action[][] currUtilArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
         Utility_Action[][] newUtilArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
 
         newUtilArr = initializeUtilities();
@@ -49,18 +50,18 @@ public class ValueIteration {
             delta = Double.MIN_VALUE;
 
             Utility_Action[][] currUtilArrCopy =
-                    new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
+                    new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
             UtilityControl.updateUtilities(currUtilArr, currUtilArrCopy);
             utilityList.add(currUtilArrCopy);
 
             // For each state
-            for(int row = 0 ; row < constants.NUM_ROWS ; row++) {
-                for(int col = 0 ; col < constants.NUM_COLS ; col++) {
+            for(int row = 0 ; row < constants.NUM_ROWS*SCALE ; row++) {
+                for(int col = 0 ; col < constants.NUM_COLS*SCALE ; col++) {
 
                     // Calculate the utility for each state, not necessary to calculate for walls
                     if (!grid[col][row].isWall()) {
                         newUtilArr[col][row] =
-                                UtilityControl.getBestUtility(col, row, currUtilArr, grid);
+                                UtilityControl.getBestUtility(col, row, currUtilArr, grid, SCALE);
 
                         double updatedUtil = newUtilArr[col][row].getUtil();
                         double currentUtil = currUtilArr[col][row].getUtil();
@@ -80,9 +81,9 @@ public class ValueIteration {
     private static Utility_Action[][] initializeUtilities()
     {
 
-        Utility_Action[][] newArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
-        for (int col = 0; col < constants.NUM_COLS; col++) {
-            for (int row = 0; row < constants.NUM_ROWS; row++) {
+        Utility_Action[][] newArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
+        for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
                 newArr[col][row] = new Utility_Action();
             }
         }
@@ -99,7 +100,7 @@ public class ValueIteration {
         StringBuilder sb = new StringBuilder();
 
         // Displays the Grid Environment
-        sb.append(DisplayControl.displayGrid(grid));
+        sb.append(DisplayControl.displayGrid(grid, SCALE));
 
         // Displays the experiment setup
         sb.append(DisplayControl.displayExperimentSetup(isValueIteration, constants.CONVERGENCE_THRESHOLD));
@@ -108,13 +109,13 @@ public class ValueIteration {
         sb.append(DisplayControl.displayIterationsCount(iterations));
 
         // Display the final utilities of all the (non-wall) states
-        sb.append(DisplayControl.displayUtilities(grid, optimalPolicy));
+        sb.append(DisplayControl.displayUtilities(grid, optimalPolicy, SCALE));
 
         // Display the optimal policy
-        sb.append(DisplayControl.displayPolicy(optimalPolicy));
+        sb.append(DisplayControl.displayPolicy(optimalPolicy, SCALE));
 
         // Display the final utilities of all states
-        sb.append(DisplayControl.displayUtilitiesGrid(optimalPolicy));
+        sb.append(DisplayControl.displayUtilitiesGrid(optimalPolicy, SCALE));
         return sb.toString();
     }
 

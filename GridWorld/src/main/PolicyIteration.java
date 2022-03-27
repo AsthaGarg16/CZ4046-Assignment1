@@ -16,6 +16,7 @@ public class PolicyIteration {
     private static Cell[][] grid;
     private static int iterations = 0;
     private static boolean isValueIteration = false;
+    private static int SCALE = 1;
 
     public static void main(String[] args) {
 
@@ -29,13 +30,13 @@ public class PolicyIteration {
         config_and_results = displayResults();
 
         FileIOHandler.writeToFile(utilityList, "policy_iteration_utilities");
-        FileIOHandler.writeToTxt(config_and_results, isValueIteration);
+        FileIOHandler.writeToTxt(config_and_results, isValueIteration, SCALE);
     }
 
 
     public static void runPolicyIteration(final Cell[][] grid) {
 
-        Utility_Action[][] currUtilArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
+        Utility_Action[][] currUtilArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
         Utility_Action[][] newUtilArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
         newUtilArr = initializeUtilitiesPolicies();
 
@@ -48,26 +49,26 @@ public class PolicyIteration {
 
             UtilityControl.updateUtilities(newUtilArr, currUtilArr);
             Utility_Action[][] currUtilArrCopy =
-                    new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
+                    new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
             UtilityControl.updateUtilities(currUtilArr, currUtilArrCopy);
             utilityList.add(currUtilArrCopy);
 
 
-            newUtilArr = UtilityControl.estimateNextUtilities(currUtilArr, grid);
+            newUtilArr = UtilityControl.estimateNextUtilities(currUtilArr, grid, SCALE);
 
             unchanged = true;
 
 
-            for (int row = 0; row < constants.NUM_ROWS; row++) {
-                for (int col = 0; col < constants.NUM_COLS; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
+                for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
 
 
                     if (!grid[col][row].isWall()) {
                         Utility_Action bestActionUtil =
-                                UtilityControl.getBestUtility(col, row, newUtilArr, grid);
+                                UtilityControl.getBestUtility(col, row, newUtilArr, grid, SCALE);
 
                         Action policyAction = newUtilArr[col][row].getAction();
-                        Utility_Action policyActionUtil = UtilityControl.getFixedUtility(policyAction, col, row, newUtilArr, grid);
+                        Utility_Action policyActionUtil = UtilityControl.getFixedUtility(policyAction, col, row, newUtilArr, grid, SCALE);
 
                         if((bestActionUtil.getUtil() > policyActionUtil.getUtil())) {
                             newUtilArr[col][row].setAction(bestActionUtil.getAction());
@@ -83,9 +84,9 @@ public class PolicyIteration {
 
     private static Utility_Action[][] initializeUtilitiesPolicies()
     {
-        Utility_Action[][] newArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
-        for (int col = 0; col < constants.NUM_COLS; col++) {
-            for (int row = 0; row < constants.NUM_ROWS; row++) {
+        Utility_Action[][] newArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
+        for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
                 newArr[col][row] = new Utility_Action();
                 if (!grid[col][row].isWall()) {
                     Action randomAction = Action.getRandomAction();
@@ -107,7 +108,7 @@ public class PolicyIteration {
         StringBuilder s = new StringBuilder();
 
         // Displays the Grid Environment
-        s.append(DisplayControl.displayGrid(grid));
+        s.append(DisplayControl.displayGrid(grid, SCALE));
 
         // Displays the experiment setup
         s.append(DisplayControl.displayExperimentSetup(isValueIteration, 0));
@@ -116,13 +117,13 @@ public class PolicyIteration {
         s.append(DisplayControl.displayIterationsCount(iterations));
 
         // Display the utilities of all the (non-wall) Cells
-        s.append(DisplayControl.displayUtilities(grid, optimalPolicy));
+        s.append(DisplayControl.displayUtilities(grid, optimalPolicy, SCALE));
 
         // Display the optimal policy
-        s.append(DisplayControl.displayPolicy(optimalPolicy));
+        s.append(DisplayControl.displayPolicy(optimalPolicy, SCALE));
 
         // Display the utilities of all Cells
-        s.append(DisplayControl.displayUtilitiesGrid(optimalPolicy));
+        s.append(DisplayControl.displayUtilitiesGrid(optimalPolicy, SCALE));
         return s.toString();
     }
 }

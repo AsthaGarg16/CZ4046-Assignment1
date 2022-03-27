@@ -8,24 +8,24 @@ import entity.constants;
 public class DisplayControl {
 
     // Display the Grid Environment
-    public static String displayGrid(Cell[][] grid) {
+    public static String displayGrid(Cell[][] grid, int scale) {
         StringBuilder sb = DisplayControl.frameTitle("Grid Environment");
         sb.append("|");
-        sb.append("--------|".repeat(constants.NUM_COLS));
+        sb.append("--------|".repeat(constants.NUM_COLS*scale));
         sb.append("\n");
 
-        for (int row = 0; row < constants.NUM_ROWS; row++) {
+        for (int row = 0; row < constants.NUM_ROWS*scale; row++) {
 
             sb.append("|");
-            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS));
+            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS*scale));
             sb.append("\n");
 
             sb.append("|");
-            for(int col = 0 ; col < constants.NUM_COLS ; col++) {
+            for(int col = 0 ; col < constants.NUM_COLS*scale ; col++) {
 
                 Cell state = grid[col][row];
                 String temp;
-                if (col == constants.AGENT_START_COL && row == constants.AGENT_START_ROW) {
+                if (col == constants.AGENT_START_COL*scale && row == constants.AGENT_START_ROW*scale) {
                     temp = " Start";
                 } else if(state.isWall()) {
                     temp = "Wall";
@@ -45,11 +45,11 @@ public class DisplayControl {
             }
 
             sb.append("\n|");
-            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS));
+            sb.append("--------|".replace('-', ' ').repeat(constants.NUM_COLS*scale));
             sb.append("\n");
 
             sb.append("|");
-            sb.append("--------|".repeat(constants.NUM_COLS));
+            sb.append("--------|".repeat(constants.NUM_COLS*scale));
             sb.append("\n");
         }
 
@@ -58,13 +58,13 @@ public class DisplayControl {
     }
 
     // Display the policy, i.e. the action to be taken at each state
-    public static String displayPolicy(final Utility_Action[][] utilArr) {
+    public static String displayPolicy(final Utility_Action[][] utilArr, int scale) {
         StringBuilder sb = frameTitle("Plot of Optimal Policy");
-        for (int row = 0; row < constants.NUM_ROWS; row++) {
+        for (int row = 0; row < constants.NUM_ROWS*scale; row++) {
 
             sb.append("\n");
 
-            for (int col = 0; col < constants.NUM_COLS; col++) {
+            for (int col = 0; col < constants.NUM_COLS*scale; col++) {
                 String util = utilArr[col][row].getActionStr();
                 int n = (9 - util.length())/2;
                 String str = String.format("%1$"+n+"s", "");
@@ -79,10 +79,10 @@ public class DisplayControl {
     }
 
     // Display the utilities of all the (non-wall) states
-    public static String displayUtilities(final Cell[][] grid, final Utility_Action[][] utilArr) {
+    public static String displayUtilities(final Cell[][] grid, final Utility_Action[][] utilArr, int scale) {
         StringBuilder sb = frameTitle("Utility Values of States");
-        for (int col = 0; col < constants.NUM_COLS; col++) {
-            for (int row = 0; row < constants.NUM_ROWS; row++) {
+        for (int col = 0; col < constants.NUM_COLS*scale; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*scale; row++) {
 
                 if (!grid[col][row].isWall()) {
                     String util = String.format("%.8g", utilArr[col][row].getUtil());
@@ -96,7 +96,7 @@ public class DisplayControl {
     }
 
     // Display the utilities of all the states, in a grid format
-    public static String displayUtilitiesGrid(final Utility_Action[][] utilArr) {
+    public static String displayUtilitiesGrid(final Utility_Action[][] utilArr, int scale) {
 
         StringBuilder sb = frameTitle("Utilities of All States (Map)");
 
@@ -105,13 +105,13 @@ public class DisplayControl {
         String pattern = "00.000";
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
-        for (int row = 0; row < constants.NUM_ROWS; row++) {
+        for (int row = 0; row < constants.NUM_ROWS*scale; row++) {
 
 
             sb.append("\n");
 
 
-            for (int col = 0; col < constants.NUM_COLS; col++) {
+            for (int col = 0; col < constants.NUM_COLS*scale; col++) {
 
                 sb.append(String.format(" %s ",
                         decimalFormat.format(utilArr[col][row].getUtil()).substring(0, 6)));

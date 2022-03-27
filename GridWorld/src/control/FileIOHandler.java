@@ -54,11 +54,13 @@ public class FileIOHandler
     }
 
 
-    public static void writeToTxt(String configInfo, boolean isValue)
+    public static void writeToTxt(String configInfo, boolean isValue, int scale)
     {
         try
         {
-            String filename = isValue?"config_results_value.txt":"config_results_policy.txt";
+            String file1="config_results_value_scale_"+scale+".txt";
+            String file2="config_results_policy_scale_"+scale+".txt";
+            String filename = isValue?file1:file2;
             FileWriter fw = new FileWriter(new File(filename), false);
 
             fw.write(configInfo);
