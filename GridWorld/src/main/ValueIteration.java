@@ -27,8 +27,10 @@ public class ValueIteration {
 
         runValueIteration(grid);
 
-        String configInfo = displayResults();
+        String configInfo = displayResults(); //for saving data to txt
+        //write to txt
         FileIOHandler.writeToTxt(configInfo, isValueIteration, SCALE);
+        //write utilities to csv
         FileIOHandler.writeToFile(utilityList, "value_iteration_utilities", 1);
     }
 
@@ -50,13 +52,22 @@ public class ValueIteration {
 
         do {
             iterations++;
-            UtilityControl.updateUtilities(newUtilArr, currUtilArr);
+
+            for (int i = 0; i < newUtilArr.length; i++) {
+                System.arraycopy(newUtilArr[i], 0, currUtilArr[i], 0, newUtilArr[i].length);
+            }
+
 
             delta = Double.MIN_VALUE;
 
             Utility_Action[][] currUtilArrCopy =
                     new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
-            UtilityControl.updateUtilities(currUtilArr, currUtilArrCopy);
+
+
+            for (int i = 0; i < currUtilArr.length; i++) {
+                System.arraycopy(currUtilArr[i], 0, currUtilArrCopy[i], 0, currUtilArr[i].length);
+            }
+
             utilityList.add(currUtilArrCopy);
 
             // For each state

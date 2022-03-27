@@ -27,9 +27,10 @@ public class PolicyIteration {
 
         runPolicyIteration(grid);
 
-        config_and_results = displayResults();
-
+        config_and_results = displayResults(); //for saving to txt
+        //write the utilities to the csv file
         FileIOHandler.writeToFile(utilityList, "policy_iteration_utilities", 1);
+        //write the data to txt
         FileIOHandler.writeToTxt(config_and_results, isValueIteration, SCALE);
     }
 
@@ -38,8 +39,15 @@ public class PolicyIteration {
 
         Utility_Action[][] currUtilArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
         Utility_Action[][] newUtilArr = new Utility_Action[constants.NUM_COLS][constants.NUM_ROWS];
-        newUtilArr = initializeUtilitiesPolicies();
-
+        for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
+            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
+                newUtilArr[col][row] = new Utility_Action();
+                if (!grid[col][row].isWall()) {
+                    Action randomAction = Action.getRandomAction();
+                    newUtilArr[col][row].setAction(randomAction);
+                }
+            }
+        }
 
         utilityList = new ArrayList<>();
 
@@ -47,10 +55,17 @@ public class PolicyIteration {
 
         do {
 
-            UtilityControl.updateUtilities(newUtilArr, currUtilArr);
+            for (int i = 0; i < newUtilArr.length; i++) {
+                System.arraycopy(newUtilArr[i], 0, currUtilArr[i], 0, newUtilArr[i].length);
+            }
+
             Utility_Action[][] currUtilArrCopy =
                     new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
-            UtilityControl.updateUtilities(currUtilArr, currUtilArrCopy);
+
+            for (int i = 0; i < currUtilArr.length; i++) {
+                System.arraycopy(currUtilArr[i], 0, currUtilArrCopy[i], 0, currUtilArr[i].length);
+            }
+
             utilityList.add(currUtilArrCopy);
 
 
@@ -68,7 +83,14 @@ public class PolicyIteration {
                                 UtilityControl.getBestUtility(col, row, newUtilArr, grid, SCALE);
 
                         Action policyAction = newUtilArr[col][row].getAction();
-                        Utility_Action policyActionUtil = UtilityControl.getFixedUtility(policyAction, col, row, newUtilArr, grid, SCALE);
+
+                        Utility_Action policyActionUtil = switch (policyAction) {
+                            case UP -> new Utility_Action(Action.UP, UtilityControl.getActionUpUtility(col, row, newUtilArr, grid, SCALE));
+                            case DOWN -> new Utility_Action(Action.DOWN, UtilityControl.getActionDownUtility(col, row, newUtilArr, grid, SCALE));
+                            case LEFT -> new Utility_Action(Action.LEFT, UtilityControl.getActionLeftUtility(col, row, newUtilArr, grid, SCALE));
+                            case RIGHT -> new Utility_Action(Action.RIGHT, UtilityControl.getActionRightUtility(col, row, newUtilArr, grid, SCALE));
+                        };
+
 
                         if((bestActionUtil.getUtil() > policyActionUtil.getUtil())) {
                             newUtilArr[col][row].setAction(bestActionUtil.getAction());
@@ -82,29 +104,12 @@ public class PolicyIteration {
         } while (!unchanged);
     }
 
-    private static Utility_Action[][] initializeUtilitiesPolicies()
-    {
-        Utility_Action[][] newArr = new Utility_Action[constants.NUM_COLS*SCALE][constants.NUM_ROWS*SCALE];
-        for (int col = 0; col < constants.NUM_COLS*SCALE; col++) {
-            for (int row = 0; row < constants.NUM_ROWS*SCALE; row++) {
-                newArr[col][row] = new Utility_Action();
-                if (!grid[col][row].isWall()) {
-                    Action randomAction = Action.getRandomAction();
-                    newArr[col][row].setAction(randomAction);
-                }
-            }
-        }
-        return newArr;
-    }
-
-
-
 
     private static String displayResults() {
         // Final item in the list is the optimal policy derived by policy iteration
-        int latestUtilities = utilityList.size() - 1;
+
         final Utility_Action[][] optimalPolicy =
-                utilityList.get(latestUtilities);
+                utilityList.get(utilityList.size() - 1);
         StringBuilder s = new StringBuilder();
 
         // Displays the Grid Environment

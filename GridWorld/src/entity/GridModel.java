@@ -72,7 +72,7 @@ public class GridModel {
         }
     }
 
-    // Used to 'expand' the maze
+
     public void duplicateGrid() {
 
         for(int row = 0 ; row < constants.NUM_ROWS ; row++) {
